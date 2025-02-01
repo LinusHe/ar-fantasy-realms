@@ -53,6 +53,11 @@
     if (searchInput) {
       searchInput.removeEventListener("input", onSearchInput);
       searchInput.addEventListener("input", onSearchInput);
+      searchInput.addEventListener("focusout", function () {
+        if (searchInput.value.trim().length === 0) {
+          resultsContainer.innerHTML = "";
+        }
+      });
     }
 
     function onSearchInput(e) {
@@ -64,7 +69,7 @@
         results = results.filter(result => {
           return !window.hand.containsId(result.item.id);
         });
-        
+
         results.forEach(function (result) {
           var card = result.item;
           // Compute the suit border color.
@@ -83,14 +88,15 @@
           var resultEl = tempEl.firstElementChild;
           // NEW: Attach a click event listener that calls addToView with the card id.
           resultEl.addEventListener('click', function () {
-            // Trigger the normal card addition behavior defined in app.js.
             addToView(card.id);
-            // clear input
             searchInput.value = '';
-            // focus on search input
-            searchInput.focus();
-            // remove card from possible search results
-            resultsContainer.removeChild(resultEl);
+
+            resultsContainer.innerHTML = "";
+
+            // Only focus if we haven't reached the hand limit 
+            if (hand.size() < hand.limit()) {
+              searchInput.focus();
+            }
           });
           resultsContainer.appendChild(resultEl);
         });
