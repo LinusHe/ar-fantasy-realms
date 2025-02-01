@@ -12,6 +12,6 @@ const https = {
 export default defineConfig({
   server: {
     host: true,
-    https
+    // https
   }
 }) 

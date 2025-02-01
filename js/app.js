@@ -24,7 +24,7 @@ var languages = {
   'kr': '한국어',
   'ru': 'Русский',
   'zh': '中文'
-}
+};
 
 $(document).ready(function () {
   const lang = localStorage.getItem('language') || 'en';
@@ -93,6 +93,12 @@ function updateLabels(lang) {
   $('#selected-language').html(languages[lang]);
   $('#language .dropdown-item').removeClass('active');
   $('#lang-' + lang).addClass('active');
+
+  // Update the search input placeholder via i18n
+  $("#card-search-input").attr("placeholder", jQuery.i18n.prop("label.search.cards"));
+
+  // New search functionality is now initialized from js/search.js:
+  initializeSearch();
 }
 
 function configureSelectedExpansions() {
@@ -330,7 +336,7 @@ function updateUrl() {
       expansions.push('ch_items');
     }
     if (cursedHoardSuits) {
-      expansions.push('ch_suits')
+      expansions.push('ch_suits');
     }
     params.push('expansions=' + expansions.join(','));
     params.push('playerCount=' + playerCount);
@@ -396,7 +402,7 @@ function useCardAction(id) {
 
 function cancelCardAction(id) {
   click.play();
-  hand.undoCardAction(id)
+  hand.undoCardAction(id);
   actionId = NONE;
   bookOfChangesSelectedCard = NONE;
   bookOfChangesSelectedSuit = undefined;

@@ -407,3 +407,11 @@ button {
 #cards div.suit-selection {
   background-color: #aed77b;
 }
+
+#card-search {
+  padding: 0.5rem;
+}
+
+#card-search-results div {
+  cursor: pointer;
+}
