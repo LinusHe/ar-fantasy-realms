@@ -1465,7 +1465,7 @@ var cursedItems = {
     bonus: true,
     strength: -30
   }
-}
+};
 
 var deck = {
   cards: { ...base },
@@ -1478,15 +1478,19 @@ var deck = {
         delete this.cards[card.replaces];
       }
     }
+    $(document).trigger('deckChanged');
   },
   disableCursedHoardSuits: function () {
-    this.cards = { ...base }
+    this.cards = { ...base };
+    $(document).trigger('deckChanged');
   },
   enableCursedHoardItems: function () {
     this.cursedItems = cursedItems;
+    $(document).trigger('deckChanged');
   },
   disableCursedHoardItems: function () {
     this.cursedItems = {};
+    $(document).trigger('deckChanged');
   },
   getCardByName: function (cardName) {
     for (const id in this.cards) {
@@ -1504,11 +1508,11 @@ var deck = {
   },
   getCardById: function (id) {
     if (typeof (id) == "number") {
-      id = id.toString()
+      id = id.toString();
     }
 
     if (id.match(/^[0-9+]+$/)) {
-      id = 'FR' + id.padStart(2, '0')
+      id = 'FR' + id.padStart(2, '0');
     }
     return this.cards[id] || this.cursedItems[id];
   },

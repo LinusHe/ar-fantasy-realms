@@ -1,42 +1,53 @@
 (function () {
   // Expose initializeSearch globally so that app.js can call it after language update.
   window.initializeSearch = function () {
-    if (typeof deck === "undefined" || !deck.cards) {
+    if (typeof deck === "undefined") {
       console.error("Deck data is not available to initialize search");
       return;
     }
 
-    // Build card data array with i18n names and suits.
-    var cardData = [];
-    for (var id in deck.cards) {
-      if (deck.cards.hasOwnProperty(id)) {
-        var card = deck.cards[id];
+    // Build card data array with i18n names and suits
+    function buildCardData(cards) {
+      var data = [];
+      for (var id in cards) {
+        if (cards.hasOwnProperty(id)) {
+          var card = cards[id];
 
-        // Get translations safely
-        var tName = card.name || "";  // Default to original name
-        var tSuit = card.suit || "";  // Default to original suit
+          // Get translations safely
+          var tName = card.name || "";
+          var tSuit = card.suit || "";
 
-        // Only try to get translations if i18n is properly initialized
-        if ($.i18n && $.i18n.map) {
-          tName = $.i18n.map[id + '.name'] || tName;
-          tSuit = $.i18n.map['suit.' + card.suit] || tSuit;
+          if ($.i18n && $.i18n.map) {
+            tName = $.i18n.map[id + '.name'] || tName;
+            tSuit = $.i18n.map['suit.' + card.suit] || tSuit;
+          }
+
+          data.push({
+            id: card.id,
+            name: card.name,
+            suit: card.suit,
+            strength: card.strength,
+            i18nName: tName,
+            i18nSuit: tSuit,
+            cursedItem: card.cursedItem || false
+          });
         }
-
-        cardData.push({
-          id: card.id,
-          name: card.name,              // fallback/original name
-          suit: card.suit,
-          strength: card.strength,
-          i18nName: tName,
-          i18nSuit: tSuit
-        });
       }
+      return data;
     }
 
-    // Determine current language.
+    // Get all cards to search based on enabled expansions
+    var allCards = { ...deck.cards };
+    if (cursedHoardItems) {
+      allCards = { ...allCards, ...deck.cursedItems };
+    }
+
+    var cardData = buildCardData(allCards);
+
+    // Determine current language
     var currentLang = localStorage.getItem('language') || 'en';
 
-    // Initialize Fuse.js index with all cards
+    // Initialize Fuse.js index
     var options = {
       keys: (currentLang === 'de') ? ['i18nName', 'i18nSuit'] : ['name', 'i18nName', 'suit', 'i18nSuit'],
       threshold: 0.3
@@ -78,7 +89,8 @@
           var html = template({
             i18nName: card.i18nName,
             i18nSuit: card.i18nSuit,
-            suitColor: suitColor
+            suitColor: suitColor,
+            isCursedItem: card.cursedItem
           });
 
           // Instead of inserting HTML directly, create an element so that we can attach a click event.
@@ -104,19 +116,26 @@
     }
   };
 
-  // Initialize search once the DOM is ready:
+  // Add deck change listener
+  function onDeckChange() {
+    initializeSearch();
+  }
+
+  // Initialize search once the DOM is ready
   $(document).ready(function () {
+    // Listen for deck changes
+    $(document).on('deckChanged', onDeckChange);
+
     $.i18n.properties({
       name: 'Messages',
       path: 'i18n/',
-      mode: 'map',           // Changed to 'map' mode to avoid variable evaluation
+      mode: 'map',
       language: localStorage.getItem('language') || 'en',
       callback: function () {
         initializeSearch();
       },
       error: function (xhr, status, error) {
         console.error('Failed to load i18n properties:', status, error);
-        // Still initialize search with fallback values
         initializeSearch();
       }
     });
