@@ -1,0 +1,14 @@
+{
+  "name": "fantasy-realms-scoring-app",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "tesseract.js": "^4.0.2"
+  },
+  "devDependencies": {
+    "vite": "^4.0.0"
+  }
+} 
