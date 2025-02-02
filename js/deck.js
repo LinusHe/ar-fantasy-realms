@@ -1478,19 +1478,15 @@ var deck = {
         delete this.cards[card.replaces];
       }
     }
-    $(document).trigger('deckChanged');
   },
   disableCursedHoardSuits: function () {
     this.cards = { ...base };
-    $(document).trigger('deckChanged');
   },
   enableCursedHoardItems: function () {
     this.cursedItems = cursedItems;
-    $(document).trigger('deckChanged');
   },
   disableCursedHoardItems: function () {
     this.cursedItems = {};
-    $(document).trigger('deckChanged');
   },
   getCardByName: function (cardName) {
     for (const id in this.cards) {
