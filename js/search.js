@@ -128,9 +128,11 @@ class Search {
         // Execute the search query against the Fuse.js index.
         let results = window.fuse.search(query);
 
-        // Filter out cards that are already in the player's hand.
+        // Filter out cards that are already in the player's hand or on the discard stack.
         results = results.filter(
-          (result) => !window.hand.containsId(result.item.id)
+          (result) =>
+            !window.hand.containsId(result.item.id) &&
+            !window.discard.containsId(result.item.id)
         );
 
         // Render each search result.
@@ -149,14 +151,13 @@ class Search {
           wrapper.innerHTML = html;
           const resultEl = wrapper.firstElementChild;
 
-          // Setup the click event to add the card to the view
-          // and to clear the search afterwards.
+          // Setup the click event to add the card to the view and clear the search afterwards.
           resultEl.addEventListener("click", () => {
             addToView(card.id);
             searchInput.value = "";
             resultsContainer.innerHTML = "";
-            // Return focus to the search input if the hand is not at its limit.
-            if (hand.size() < hand.limit()) {
+            // Return focus to the search input if the hand is not at its limit or if discard area is active.
+            if (hand.size() < hand.limit() || $("#discard").is(":visible")) {
               searchInput.focus();
             }
           });
