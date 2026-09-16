@@ -297,11 +297,6 @@ function updateHandView() {
   }
   $('#cardCount').text(hand.size());
   $('#cardLimit').text(hand.limit());
-  if (hand.empty()) {
-    $('#settings').show();
-  } else {
-    $('#settings').hide();
-  }
   updateUrl();
 }
 

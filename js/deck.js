@@ -118,7 +118,7 @@ var base = {
     blanks: function (card, hand) {
       return (card.suit === 'army' && !isArmyClearedFromPenalty(this, hand)) ||
         (card.suit === 'land' && card.name !== 'Mountain') ||
-        (card.suit === 'flame' && card.name !== 'Lightning') || card.id === PHOENIX_PROMO;
+        (card.suit === 'flame' && card.name !== 'Lightning') || isPhoenix(card);
     },
     relatedSuits: ['army', 'land', 'flame'],
     relatedCards: ['Mountain', 'Lightning']
@@ -1152,7 +1152,7 @@ var cursedHoard = {
       return (card.suit === 'army' && !isArmyClearedFromPenalty(this, hand)) ||
         (card.suit === 'building') ||
         (card.suit === 'land' && card.name !== 'Mountain') ||
-        (card.suit === 'flame' && card.name !== 'Lightning') || card.id === PHOENIX_PROMO;
+        (card.suit === 'flame' && card.name !== 'Lightning') || isPhoenix(card);
     },
     relatedSuits: ['army', 'building', 'land', 'flame'],
     relatedCards: ['Mountain', 'Lightning']

@@ -1,0 +1,23 @@
+services:
+  fantasy-realms:
+    build: .
+    container_name: fantasy-realms
+    restart: unless-stopped
+    env_file:
+      # Keep the one-field login identical to the Qwixx app without
+      # duplicating the password in this repository.
+      - ../qwixx-scoreboard/.env
+    networks:
+      - traefiknet
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.fantasy-realms.entrypoints=websecure"
+      - "traefik.http.routers.fantasy-realms.rule=Host(`fr.oscarr.de`)"
+      - "traefik.http.routers.fantasy-realms.tls=true"
+      - "traefik.http.routers.fantasy-realms.tls.certresolver=production"
+      - "traefik.http.services.fantasy-realms.loadbalancer.server.port=3000"
+      - "traefik.docker.network=traefiknet"
+
+networks:
+  traefiknet:
+    external: true
