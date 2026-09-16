@@ -30,19 +30,27 @@
   var _updateLabels = window.updateLabels;
   window.updateLabels = function (lang) {
     _updateLabels(lang);
-    var de = lang === 'de';
+    var t = function (key) { return jQuery.i18n.prop(key); };
     document.documentElement.lang = lang;
-    document.getElementById('settings-title').textContent = de ? 'Einstellungen' : 'Settings';
-    document.getElementById('card-search').placeholder = de ? 'Karten suchen…' : 'Search cards…';
-    document.getElementById('card-search').setAttribute('aria-label', de ? 'Karten suchen' : 'Search cards');
-    document.getElementById('fr-no-results').textContent = de ? 'Keine Karten gefunden' : 'No cards found';
-    document.querySelector('[data-design-choice="classic"]').textContent = de ? 'Klassisch' : 'Classic';
-    [['open-settings', de ? 'Einstellungen' : 'Settings'], ['close-settings', de ? 'Schließen' : 'Close'],
-      ['card-search-clear', de ? 'Suche leeren' : 'Clear search'], ['clear', jQuery.i18n.prop('button.reset')]].forEach(function (entry) {
+    document.title = t('app.title');
+    document.querySelector('meta[name="description"]').content = t('app.description');
+    document.getElementById('settings-title').textContent = t('ui.settings');
+    document.getElementById('card-search').placeholder = t('ui.search');
+    document.getElementById('card-search').setAttribute('aria-label', t('ui.search'));
+    document.getElementById('fr-no-results').textContent = t('ui.no-results');
+    document.getElementById('design-label').textContent = t('ui.design');
+    document.getElementById('hand-label').textContent = t('ui.hand');
+    document.getElementById('expansion-title').textContent = t('label.cursed-hoard');
+    document.querySelector('.fr-set-block-head img').alt = t('label.cursed-hoard');
+    document.querySelector('.fr-legal').textContent = t('ui.legal');
+    document.querySelector('[data-design-choice="modern"]').textContent = t('ui.modern');
+    document.querySelector('[data-design-choice="classic"]').textContent = t('ui.classic');
+    [['open-settings', t('ui.settings')], ['close-settings', t('ui.close')],
+      ['card-search-clear', t('ui.clear-search')], ['clear', t('button.reset')], ['language-selector', t('ui.language')]].forEach(function (entry) {
       document.getElementById(entry[0]).setAttribute('aria-label', entry[1]);
       document.getElementById(entry[0]).title = entry[1];
     });
-    document.getElementById('hand').dataset.emptyLabel = de ? 'Tippe auf Karten, um sie deiner Hand hinzuzufügen.' : 'Tap cards to add them to your hand.';
+    document.getElementById('hand').dataset.emptyLabel = t('ui.empty-hand');
   };
 
   /* ---------- wrap app.js render functions ---------- */

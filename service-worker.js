@@ -1,5 +1,5 @@
 var APP_PREFIX = 'fantasy-realms-';
-var VERSION = '4.1.0';
+var VERSION = '4.1.1';
 var CACHE_NAME = APP_PREFIX + VERSION;
 var PRECACHE = [
   '/',

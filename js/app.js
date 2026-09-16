@@ -27,7 +27,8 @@ var languages = {
 }
 
 $(document).ready(function () {
-  const lang = localStorage.getItem('language') || 'en';
+  const savedLanguage = localStorage.getItem('language');
+  const lang = Object.prototype.hasOwnProperty.call(languages, savedLanguage) ? savedLanguage : 'de';
   jQuery.i18n.properties({
     name: 'Messages',
     path: 'i18n/',
@@ -80,6 +81,21 @@ function selectLanguage(lang) {
     callback: function () {
       swoosh.play();
       showCards();
+      updateHandView();
+      updateDiscardAreaView();
+      if (actionId !== NONE) {
+        $('#card-action-text-' + actionId).text(jQuery.i18n.prop(actionId + '.action'));
+        $('#card-action-use-' + actionId).hide();
+        $('#card-action-cancel-' + actionId).show();
+        if (actionId === BOOK_OF_CHANGES) {
+          var template = Handlebars.compile($('#suit-selection-template').html());
+          $('#cards').html(template({ suits: deck.suits() }));
+        } else if ([SHAPESHIFTER, CH_SHAPESHIFTER, MIRAGE, CH_MIRAGE].includes(actionId)) {
+          showCards(hand.getCardById(actionId).card.relatedSuits);
+        }
+      } else if (inputDiscardArea) {
+        showCards(allSuits());
+      }
       updateLabels(lang);
     }
   });

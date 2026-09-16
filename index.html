@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
   <meta charset="utf-8">
-  <title>Fantasy Realms: App of Scoring</title>
-  <meta name="description" content="Fantasy Realms: App of Scoring">
+  <title>Fantasy Realms – Wertungs-App</title>
+  <meta name="description" content="Offlinefähige Wertungs-App für Fantasy Realms.">
   <meta name="author" content="Jimmy Praet">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="msapplication-TileColor" content="#0b0714">
@@ -182,17 +182,17 @@
       <div class="fr-brand">
         <img class="fr-classic-logo" src="img/fantasy-realms.jpg" alt="Fantasy Realms">
         <span class="fr-title">Fantasy&nbsp;Realms</span>
-        <span class="fr-subtitle">App of Scoring</span>
+        <span class="fr-subtitle">Wertungs-App</span>
       </div>
       <div class="fr-hud">
         <div class="fr-count"><span id="cardCount">0</span><span class="sep">/</span><span id="cardLimit">7</span></div>
         <div class="fr-orb"><span id="points">000</span></div>
       </div>
       <div class="fr-actions">
-        <button id="open-settings" class="fr-icon-btn" type="button" title="Settings" aria-label="Settings">
+        <button id="open-settings" class="fr-icon-btn" type="button" title="Einstellungen" aria-label="Einstellungen">
           <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
         </button>
-        <button id="clear" class="fr-icon-btn fr-reset" type="button" onclick="reset()" title="Reset" aria-label="Reset">
+        <button id="clear" class="fr-icon-btn fr-reset" type="button" onclick="reset()" title="Zurücksetzen" aria-label="Zurücksetzen">
           <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path></svg>
         </button>
       </div>
@@ -202,13 +202,13 @@
       <section class="fr-panel-deck">
         <div class="fr-search">
           <svg class="fr-search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input id="card-search" type="search" inputmode="search" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Search cards…">
-          <button id="card-search-clear" class="fr-search-clear" type="button" aria-label="Clear search" style="display:none">
+          <input id="card-search" type="search" inputmode="search" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Karten suchen…">
+          <button id="card-search-clear" class="fr-search-clear" type="button" aria-label="Suche leeren" style="display:none">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </button>
         </div>
         <div id="cards" class="fr-deck"></div>
-        <div id="fr-no-results" class="fr-no-results" style="display:none">No cards found</div>
+        <div id="fr-no-results" class="fr-no-results" style="display:none">Keine Karten gefunden</div>
 
         <footer class="fr-footer">
           <a href="https://wizkids.com/"><img src="img/wizkids.png" alt="WizKids"></a>
@@ -241,8 +241,8 @@
   <div id="settings-modal" class="fr-modal">
     <div class="fr-modal-card" role="dialog" aria-modal="true" aria-labelledby="settings-title">
       <div class="fr-modal-head">
-        <h2 id="settings-title">Settings</h2>
-        <button id="close-settings" class="fr-icon-btn" type="button" aria-label="Close">
+        <h2 id="settings-title">Einstellungen</h2>
+        <button id="close-settings" class="fr-icon-btn" type="button" aria-label="Schließen">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
       </div>
@@ -251,21 +251,21 @@
           <span id="design-label">Design</span>
           <div class="fr-design-options" role="group" aria-labelledby="design-label">
             <button type="button" data-design-choice="modern" aria-pressed="true">Modern</button>
-            <button type="button" data-design-choice="classic" aria-pressed="false">Classic</button>
+            <button type="button" data-design-choice="classic" aria-pressed="false">Klassisch</button>
           </div>
         </div>
         <div class="fr-set-block">
           <div class="fr-set-block-head">
-            <img src="img/cursed-hoard.png" alt="Cursed Hoard">
-            <span>The Cursed Hoard</span>
+            <img src="img/cursed-hoard.png" alt="Verfluchter Schatz">
+            <span id="expansion-title">Verfluchter Schatz</span>
           </div>
           <label class="fr-switch" for="ch_items">
-            <span id="lbl_ch_items">Cursed Items</span>
+            <span id="lbl_ch_items">Verfluchte Gegenstände</span>
             <input type="checkbox" id="ch_items">
             <span class="fr-slider"></span>
           </label>
           <label class="fr-switch" for="ch_suits">
-            <span id="lbl_ch_suits">Buildings/Outsiders/Undead</span>
+            <span id="lbl_ch_suits">Gebäude/Outsider/Untote</span>
             <input type="checkbox" id="ch_suits">
             <span class="fr-slider"></span>
           </label>
@@ -275,7 +275,7 @@
           <div id="language" class="fr-dropdown">
             <button class="fr-dropbtn" type="button" id="language-selector">
               <img src="img/globe.png" alt="">
-              <span id="selected-language">English</span>
+              <span id="selected-language">Deutsch</span>
               <svg class="caret" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </button>
             <div class="fr-dropmenu">
@@ -294,7 +294,7 @@
           </div>
 
           <label class="fr-switch" for="sound_state">
-            <span id="sound-label">Sound</span>
+            <span id="sound-label">Ton</span>
             <input type="checkbox" id="sound_state" checked>
             <span class="fr-slider"></span>
           </label>

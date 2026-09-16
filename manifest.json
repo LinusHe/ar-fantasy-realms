@@ -1,7 +1,8 @@
 {
   "id": "/",
   "short_name": "Fantasy Realms",
-  "name": "Fantasy Realms: App of Scoring",
+  "name": "Fantasy Realms – Wertungs-App",
+  "lang": "de",
   "description": "Offlinefähige Wertungs-App für Fantasy Realms.",
   "start_url": "/",
   "scope": "/",

@@ -48,6 +48,7 @@ button:focus-visible, [role="button"]:focus-visible, a:focus-visible { outline: 
 
 /* Classic: original artwork, parchment, burgundy header and split layout. */
 html[data-design="classic"] {
+  background-color: #ccc0a8;
   --land-color: #3b1d13; --flood-color: #41437c; --weather-color: #a6bced;
   --flame-color: #b44347; --army-color: #312b2f; --wizard-color: #e056a3;
   --leader-color: #7b48a4; --beast-color: #60a35c; --weapon-color: #878586;
