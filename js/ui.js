@@ -10,6 +10,40 @@
   var openSuit = null;      // currently expanded accordion group
   var sheetOpen = false;
   var mqDesktop = window.matchMedia('(min-width: 900px)');
+  function isClassic() { return document.documentElement.dataset.design === 'classic'; }
+
+  function applyDesign(design) {
+    document.documentElement.dataset.design = design === 'classic' ? 'classic' : 'modern';
+    try { localStorage.setItem('fr-design', document.documentElement.dataset.design); } catch (_) {}
+    document.querySelector('meta[name="theme-color"]').content = isClassic() ? '#6f292b' : '#0b0714';
+    document.querySelectorAll('[data-design-choice]').forEach(function (button) {
+      button.setAttribute('aria-pressed', String(button.dataset.designChoice === document.documentElement.dataset.design));
+    });
+    sheetOpen = false;
+    sheetEl().classList.remove('is-open');
+    document.getElementById('sheet-bar').setAttribute('aria-expanded', 'false');
+    document.getElementById('sheet-scrim').classList.remove('is-visible');
+    document.body.classList.remove('no-scroll');
+    layoutSheet(false);
+  }
+
+  var _updateLabels = window.updateLabels;
+  window.updateLabels = function (lang) {
+    _updateLabels(lang);
+    var de = lang === 'de';
+    document.documentElement.lang = lang;
+    document.getElementById('settings-title').textContent = de ? 'Einstellungen' : 'Settings';
+    document.getElementById('card-search').placeholder = de ? 'Karten suchen…' : 'Search cards…';
+    document.getElementById('card-search').setAttribute('aria-label', de ? 'Karten suchen' : 'Search cards');
+    document.getElementById('fr-no-results').textContent = de ? 'Keine Karten gefunden' : 'No cards found';
+    document.querySelector('[data-design-choice="classic"]').textContent = de ? 'Klassisch' : 'Classic';
+    [['open-settings', de ? 'Einstellungen' : 'Settings'], ['close-settings', de ? 'Schließen' : 'Close'],
+      ['card-search-clear', de ? 'Suche leeren' : 'Clear search'], ['clear', jQuery.i18n.prop('button.reset')]].forEach(function (entry) {
+      document.getElementById(entry[0]).setAttribute('aria-label', entry[1]);
+      document.getElementById(entry[0]).title = entry[1];
+    });
+    document.getElementById('hand').dataset.emptyLabel = de ? 'Tippe auf Karten, um sie deiner Hand hinzuzufügen.' : 'Tap cards to add them to your hand.';
+  };
 
   /* ---------- wrap app.js render functions ---------- */
   var _showCards = window.showCards;
@@ -26,8 +60,17 @@
     return r;
   };
 
+  var _updateDiscardAreaView = window.updateDiscardAreaView;
+  window.updateDiscardAreaView = function () {
+    var r = _updateDiscardAreaView.apply(this, arguments);
+    onHandUpdated();
+    return r;
+  };
+
   var _useCardAction = window.useCardAction;
   window.useCardAction = function (id) {
+    // Clear a previous search so it cannot hide action targets.
+    document.getElementById('card-search').value = '';
     var r = _useCardAction.apply(this, arguments);
     // Card actions need the deck panel — drop the sheet on mobile
     setSheet(false);
@@ -59,7 +102,8 @@
     var body = group.querySelector('.fr-group-body');
     if (!body) return;
     group.classList.toggle('is-open', open);
-    if (window.gsap && animate) {
+    group.querySelector('.fr-group-head').setAttribute('aria-expanded', String(open));
+    if (window.gsap && animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       if (open) {
         gsap.fromTo(body, { height: 0 }, { height: 'auto', duration: .45, ease: 'power3.out' });
       } else {
@@ -127,41 +171,23 @@
 
   /* ---------- hand sheet ---------- */
   function sheetEl() { return document.getElementById('hand-sheet'); }
-  function barH() {
-    var bar = document.getElementById('sheet-bar');
-    return bar ? bar.offsetHeight : 60;
-  }
-  function closedY() {
-    var sheet = sheetEl();
-    return sheet ? sheet.offsetHeight - barH() : 0;
-  }
-
   function layoutSheet(animate) {
     var sheet = sheetEl();
     if (!sheet) return;
-    if (mqDesktop.matches) {
-      if (window.gsap) gsap.set(sheet, { clearProps: 'transform' });
-      else sheet.style.transform = '';
-      return;
-    }
-    var y = sheetOpen ? 0 : closedY();
-    if (window.gsap) {
-      if (animate) {
-        gsap.to(sheet, { y: y, duration: .55, ease: sheetOpen ? 'power4.out' : 'power3.inOut' });
-      } else {
-        gsap.set(sheet, { y: y });
-      }
-    } else {
-      sheet.style.transform = 'translateY(' + y + 'px)';
-    }
+    // CSS collapses the actual panel height. Translating a full-size panel
+    // below the viewport creates an invisible, scrollable area on mobile.
+    sheet.style.transform = 'none';
+    document.getElementById('sheet-bar').setAttribute('aria-expanded', String(isClassic() || mqDesktop.matches || sheetOpen));
+    sheet.querySelector('.fr-sheet-body').inert = !isClassic() && !mqDesktop.matches && !sheetOpen;
   }
 
   function setSheet(open) {
-    if (mqDesktop.matches) return;
+    if (mqDesktop.matches || isClassic()) return;
     if (sheetOpen === open) return;
     sheetOpen = open;
     var sheet = sheetEl();
     if (sheet) sheet.classList.toggle('is-open', open);
+    document.getElementById('sheet-bar').setAttribute('aria-expanded', String(open));
     var scrim = document.getElementById('sheet-scrim');
     if (scrim) scrim.classList.toggle('is-visible', open);
     document.body.classList.toggle('no-scroll', open);
@@ -177,14 +203,25 @@
     var limit = document.getElementById('cardLimit');
     var pill = document.getElementById('sheet-count');
     if (count && limit && pill) pill.textContent = count.textContent + '/' + limit.textContent;
+    document.getElementById('sheet-points').textContent = document.getElementById('points').textContent;
     document.dispatchEvent(new CustomEvent('fr:hand-updated'));
   }
 
   /* ---------- boot ---------- */
   document.addEventListener('DOMContentLoaded', function () {
+    applyDesign(document.documentElement.dataset.design);
+    document.querySelectorAll('[data-design-choice]').forEach(function (button) {
+      button.addEventListener('click', function () { applyDesign(button.dataset.designChoice); });
+    });
     /* Deck delegation: accordion heads + card taps */
     var cardsRoot = document.getElementById('cards');
     if (cardsRoot) {
+      cardsRoot.addEventListener('keydown', function (e) {
+        if (e.target.matches('.fr-card') && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          e.target.click();
+        }
+      });
       cardsRoot.addEventListener('click', function (e) {
         var head = e.target.closest('.fr-group-head');
         if (head) {
@@ -237,6 +274,9 @@
       var modal = document.getElementById('settings-modal');
       if (!modal) return;
       modal.classList.toggle('is-open', open);
+      document.getElementById('app').inert = open;
+      if (open) document.getElementById('close-settings').focus();
+      else document.getElementById('open-settings').focus();
     }
     var openBtn = document.getElementById('open-settings');
     if (openBtn) openBtn.addEventListener('click', function () { openSettings(true); });
@@ -245,6 +285,12 @@
     var modal = document.getElementById('settings-modal');
     if (modal) modal.addEventListener('click', function (e) { if (e.target === modal) openSettings(false); });
     document.addEventListener('keydown', function (e) {
+      if (e.key === 'Tab' && modal.classList.contains('is-open')) {
+        var controls = Array.from(modal.querySelectorAll('button, input, a[href]')).filter(function (el) { return el.getClientRects().length; });
+        var first = controls[0], last = controls[controls.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
       if (e.key === 'Escape') {
         openSettings(false);
         setSheet(false);

@@ -1,5 +1,5 @@
 var APP_PREFIX = 'fantasy-realms-';
-var VERSION = '4.0.1';
+var VERSION = '4.1.0';
 var CACHE_NAME = APP_PREFIX + VERSION;
 var PRECACHE = [
   '/',
@@ -9,14 +9,15 @@ var PRECACHE = [
   '/img/cursed-hoard.png',
   '/img/wizkids.png',
   '/img/globe.png',
+  '/img/background.jpg',
+  '/img/fantasy-realms.jpg',
   '/css/style.css',
+  '/css/designs.css',
   '/fonts/cinzel-latin.woff2',
   '/fonts/cinzel-latin-ext.woff2',
   '/js/app.js',
   '/js/ui.js',
-  '/js/fx.js',
   '/js/vendor/gsap.min.js',
-  '/js/vendor/three.min.js',
   '/js/deck.js',
   '/js/discard.js',
   '/js/hand.js',

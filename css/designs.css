@@ -1,0 +1,120 @@
+/* Shared usability refinements; both designs use the same scoring state. */
+.fr-classic-logo { display: none; }
+.fr-title { animation: none; background: none; color: #f2dfb6; letter-spacing: .01em; }
+.fr-subtitle { display: none; }
+.fr-orb { box-shadow: none; background: #241c36; border-color: #5d4b39; border-radius: 12px; }
+#points, .fr-sheet-points { text-shadow: none; }
+.fr-suit-dot { box-shadow: none; width: 9px; height: 9px; }
+.fr-group { border-radius: 12px; backdrop-filter: none; background: #191324; }
+.fr-group-name { font-family: var(--font); letter-spacing: 0; font-weight: 600; }
+.fr-group-head { min-height: 48px; }
+.fr-search { border-radius: 12px; box-shadow: none; }
+.fr-search-clear { width: 36px; height: 36px; flex-shrink: 0; }
+.fr-card { min-height: 46px; }
+.fr-card-name { min-width: 0; overflow-wrap: anywhere; }
+.fr-icon-btn { width: 44px; height: 44px; flex-shrink: 0; border-radius: 12px; }
+.fr-hud { flex-shrink: 0; }
+.fr-hand.is-empty::before { content: attr(data-empty-label); font-family: var(--font); letter-spacing: 0; color: var(--muted); }
+.fr-hand .card { box-shadow: none; }
+.list-group-item { display: flow-root; }
+.action-row .btn { min-height: 40px; }
+.fr-sheet-bar { height: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px)); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.fr-sheet { transform: none; will-change: auto; height: min(74dvh, 640px); }
+@media (max-width: 899px) {
+  html:not([data-design="classic"]) .fr-sheet { transition: height .22s ease; }
+  html:not([data-design="classic"]) .fr-sheet:not(.is-open) { height: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px)); }
+  html:not([data-design="classic"]) .fr-sheet:not(.is-open) .fr-sheet-body { visibility: hidden; }
+}
+@media (min-width: 900px) { .fr-sheet { height: auto; } }
+.fr-modal-head { position: sticky; top: 0; z-index: 2; background: #211932; }
+.fr-modal-card { max-height: 88dvh; }
+.fr-design-options { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.fr-design-options button { min-height: 44px; border: 1px solid var(--line); border-radius: 9px; background: transparent; color: var(--muted); font: 600 .95rem var(--font); }
+.fr-design-options button[aria-pressed="true"] { background: var(--glass-3); border-color: var(--arcane); color: var(--text); box-shadow: inset 0 -2px var(--arcane); }
+button:focus-visible, [role="button"]:focus-visible, a:focus-visible { outline: 2px solid var(--arcane); outline-offset: 3px; }
+.fr-switch input:focus-visible + .fr-slider { outline: 2px solid var(--arcane); outline-offset: 3px; }
+@media (max-width: 380px) {
+  .fr-header { padding-left: 10px; padding-right: 10px; gap: 7px; }
+  .fr-title { font-size: .88rem; }
+  .fr-orb { min-width: 54px; padding: 0 8px; }
+  .fr-actions { gap: 4px; }
+  .fr-main { padding-left: 10px; padding-right: 10px; }
+  #settings { padding: 12px; }
+  .fr-set-block { padding: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* Classic: original artwork, parchment, burgundy header and split layout. */
+html[data-design="classic"] {
+  --land-color: #3b1d13; --flood-color: #41437c; --weather-color: #a6bced;
+  --flame-color: #b44347; --army-color: #312b2f; --wizard-color: #e056a3;
+  --leader-color: #7b48a4; --beast-color: #60a35c; --weapon-color: #878586;
+  --artifact-color: #d24e37; --wild-color: #c6c2c3; --building-color: #463153;
+  --outsider-color: #fba934; --undead-color: #004e4a; --cursed-item-color: #900c3f;
+  --text: #302723; --muted: #65574a; --muted-2: #76695b;
+  --glass: #e9e3c6; --glass-2: #f5f0df; --glass-3: #dfd3b5;
+  --line: #c8bca0; --line-strong: #b19f7e; --arcane: #6f292b;
+  --gold: #f0d46d; --gold-2: #805c19; --green: #237331; --red: #ad3030;
+  --display: var(--font);
+}
+html[data-design="classic"] body { background: #ccc0a8 url('../img/background.jpg') center / cover fixed; }
+html[data-design="classic"] #app { max-width: 960px; margin: auto; min-height: 100svh; background: #e9e3c6; }
+html[data-design="classic"] .fr-header { background: #6f292b; border: 0; gap: 8px; padding-left: 10px; padding-right: 10px; }
+html[data-design="classic"] .fr-classic-logo { display: block; width: 128px; max-width: 100%; height: 48px; object-fit: contain; object-position: left center; }
+html[data-design="classic"] .fr-brand { flex: 1; }
+html[data-design="classic"] .fr-title { display: none; }
+html[data-design="classic"] .fr-orb { background: transparent; border: 0; padding: 0 5px; min-width: 55px; }
+html[data-design="classic"] #points { font-family: var(--font); font-size: 1.7rem; }
+html[data-design="classic"] .fr-header .fr-icon-btn { color: #f4e6c5; border-color: #965352; background: #793336; }
+html[data-design="classic"] .fr-header .fr-count, html[data-design="classic"] #cardCount { color: #edd6b6; }
+html[data-design="classic"] .fr-main { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 0; padding: 0; align-items: start; }
+html[data-design="classic"] .fr-panel-deck { min-width: 0; background: #ccc0a8; padding: 6px; }
+html[data-design="classic"] .fr-search { position: static; height: 44px; margin-bottom: 6px; background: #f4eedb; padding: 0 7px; gap: 4px; border-radius: 4px; backdrop-filter: none; }
+html[data-design="classic"] .fr-search-icon { display: none; }
+html[data-design="classic"] .fr-search input { font-size: 16px; }
+html[data-design="classic"] .fr-deck { gap: 0; }
+html[data-design="classic"] .fr-group { border-radius: 0; background: #d7ccb6; border: 0; border-bottom: 1px solid #b8aa90; }
+html[data-design="classic"] .fr-group-head { border-right: 6px solid var(--fill); padding: 8px 6px; gap: 4px; }
+html[data-design="classic"] .fr-group-name { font-size: .84rem; white-space: normal; overflow-wrap: anywhere; }
+html[data-design="classic"] .fr-group-count, html[data-design="classic"] .fr-group-head .fr-suit-dot { display: none; }
+html[data-design="classic"] .fr-chevron { width: 13px; color: #65574a; }
+html[data-design="classic"] .fr-card-list { padding: 0; gap: 1px; }
+html[data-design="classic"] .fr-card { background: var(--fill); color: #fff; border: 0; border-radius: 0; padding: 9px 5px; gap: 5px; }
+html[data-design="classic"] .fr-card-name { font-size: .8rem; }
+html[data-design="classic"] .fr-str { min-width: 23px; height: 23px; padding: 0 3px; color: #fff; border: 0; border-radius: 3px; font-size: .75rem; }
+html[data-design="classic"] .fr-add { display: none; }
+html[data-design="classic"] .fr-sheet { position: sticky; top: calc(var(--header-h) + env(safe-area-inset-top, 0px)); width: 100%; height: auto; max-height: calc(100dvh - var(--header-h) - env(safe-area-inset-top, 0px)); margin: 0; max-width: none; transform: none !important; background: #e9e3c6; border: 0; border-radius: 0; box-shadow: none; backdrop-filter: none; }
+html[data-design="classic"] .fr-sheet-bar { height: 48px; padding: 0 8px; cursor: default; border-bottom: 1px solid var(--line); }
+html[data-design="classic"] .fr-sheet-title { font-size: .9rem; gap: 5px; }
+html[data-design="classic"] .fr-sheet-title svg, html[data-design="classic"] .fr-sheet-caret, html[data-design="classic"] .fr-grabber, html[data-design="classic"] .fr-sheet-points, html[data-design="classic"] .fr-scrim { display: none; }
+html[data-design="classic"] .fr-sheet-body { padding: 6px 6px calc(10px + env(safe-area-inset-bottom, 0px)); }
+html[data-design="classic"] .fr-hand .card, html[data-design="classic"] .fr-discard .card { border-radius: 4px; margin-bottom: 6px; background: #fffafa; }
+html[data-design="classic"] .fr-hand .list-group-item, html[data-design="classic"] .fr-discard .list-group-item { padding: 8px; font-size: .85rem; }
+html[data-design="classic"] .fr-hand .list-group-item { text-shadow: none; }
+html[data-design="classic"] .fr-hand .list-group-item:not(.bonus):not(.penalty):not(.timing):not(.action-row), html[data-design="classic"] .fr-discard .list-group-item { background: var(--fill); border-left: 0; }
+html[data-design="classic"] .fr-hand .list-group-item.bonus, html[data-design="classic"] .fr-hand .list-group-item.penalty, html[data-design="classic"] .fr-hand .list-group-item.action-row { background: #fffafa; font-size: .8rem; font-weight: normal; }
+html[data-design="classic"] .fr-hand .badge { margin-right: 4px; min-width: 24px; padding: 0 4px; border-radius: 3px; }
+html[data-design="classic"] .fr-card.weather, html[data-design="classic"] .fr-card.wild,
+html[data-design="classic"] .fr-card.outsider, html[data-design="classic"] .list-group-item.weather,
+html[data-design="classic"] .list-group-item.wild, html[data-design="classic"] .list-group-item.outsider { color: #252026; }
+html[data-design="classic"] .weather .points, html[data-design="classic"] .wild .points, html[data-design="classic"] .outsider .points { color: inherit; }
+html[data-design="classic"] .fr-pill { background: #ded2b5; }
+html[data-design="classic"] .fr-suit-picker { grid-template-columns: 1fr; gap: 4px; }
+html[data-design="classic"] .fr-suit-choice { border-radius: 4px; font-size: .85rem; padding: 12px 6px; }
+html[data-design="classic"] .fr-modal-card, html[data-design="classic"] .fr-modal-head { background: #f5f0df; }
+html[data-design="classic"] .fr-modal-head h2 { color: #6f292b; }
+html[data-design="classic"] .fr-dropbtn, html[data-design="classic"] .fr-dropmenu { background: #fffaf0; }
+html[data-design="classic"] .fr-dropbtn img { filter: brightness(.4); }
+html[data-design="classic"] .dropdown-item.active { background: #e5d3bd; color: #6f292b; }
+html[data-design="classic"] .btn-primary, html[data-design="classic"] .fr-switch input:checked + .fr-slider { background: #6f292b; border-color: #6f292b; box-shadow: none; }
+html[data-design="classic"] .fr-footer { flex-direction: column; gap: 8px; padding: 18px 4px; }
+html[data-design="classic"] .fr-footer img { opacity: .85; }
+html[data-design="classic"] .fr-legal { font-size: .6rem; }
+@media (max-width: 480px) {
+  html[data-design="classic"] .fr-main { grid-template-columns: minmax(112px, 37%) minmax(0, 1fr); }
+  html[data-design="classic"] .fr-hand .badge { font-size: .7rem; }
+  html[data-design="classic"] .fr-card-name { font-size: .75rem; }
+  html[data-design="classic"] .fr-hand.is-empty::before { padding: 20px 8px; }
+}
